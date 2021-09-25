@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quote Genrator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onkeyup="random_quotes() ">
+
+    <h1>Random Quote Genrator</h1>
+
+    <div id="main">
+
+        <div class="container">
+
+            <p class="quote" id="quote">The greatest glory in living lies not in never falling, but in rising every time
+                we fall.
+            </p>
+
+            <div class="bottom">
+                <p> <img src="./twitter-brands.svg" id="twitter" onclick='twit()'>
+
+                    ~ <span id="author">Nelson Mandela</span></p>
+            </div>
+        </div>
+
+        <div>
+            <button class="btn" id="next_btn" onclick="random_quotes()">Next Quote</button>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+        var quoteObj = [];
+
+        var colors = [
+            '#490A3D',
+            '#BD1550',
+            '#E97F02',
+            '#bf9c00',
+            '#8A9B0F',
+            '#1cadca',
+            '#FA6900',
+            '#16a085',
+            '#27ae60',
+            '#2c3e50',
+            '#f39c12',
+            '#e74c3c',
+            '#9b59b6',
+            '#FB6964',
+            '#342224',
+            '#472E32',
+            '#008a77',
+            '#73A857'
+        ];
+
+        $.ajax({
+            url: "quotes.json",
+            dataType: 'json',
+            type: 'get',
+            success: (data) => {
+                quoteObj = data.quotes;
+                random_quotes();
+            }
+        })
+
+
+        function random_quotes() {
+
+            var quotes_lenth = quoteObj.length;
+            var randIndex = Math.floor(Math.random() * quotes_lenth);
+
+            var randQuoteObj = quoteObj[randIndex];
+
+            var quote = randQuoteObj['quote'];
+            var author = randQuoteObj['author'];
+
+            $('#quote').text(quote);
+            $('#author').text(author);
+
+            random_bgcolor();
+        }
+
+        function random_bgcolor() {
+            var colors_lenth = colors.length;
+            var randIndex = Math.floor(Math.random() * colors_lenth);
+
+            var randColor = colors[randIndex];
+
+            document.documentElement.style.setProperty('--color', randColor)
+
+        }
+
+        function twit() {
+
+            var currentQuote = $('#quote').text();
+            var currentAuthor = $('#author').text();
+
+            window.location.href = ('https://twitter.com/intent/tweet?hashtags=quotes&related=aLamm&text=' + encodeURIComponent('"' + currentQuote + '"\n ~BY  ' + currentAuthor))
+        }
+
+    </script>
+</body>
+
+</html>
